@@ -1,0 +1,197 @@
+<head>
+  <title>Polkupyöräsimulaattori</title>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="street" class="street"></div>
+  <div id="map" class="map"></div>
+  {{> main}}
+</body>
+
+<template name="main">
+  {{#if editing}}
+    {{> editing}}
+  {{/if}}
+  {{#if sim}}
+    {{> sim}}
+  {{/if}}
+  {{#if frontpage}}
+    {{> frontpage}}
+  {{/if}}
+  {{#if frontpage_edit}}
+    {{> frontpage}}
+  {{/if}}
+  {{#if help}}
+    {{> help}}
+  {{/if}}
+  {{#if settings}}
+    {{> settings}}
+  {{/if}}
+
+  <div class="navbar navbar-inverse navbar-fixed-bottom">
+    <div class="navbar-inner">
+      <a class="brand" href="/">Bicycle sim <span>v0.1</span></a>
+      <ul class="nav">
+        <li{{#if frontpage}} class="active"{{/if}}{{#if sim}} class="active"{{/if}}>
+          <a href="/">
+            <i class="icon-road"></i> Simulaatio
+            {{#if sim}} <span class="divider">/</span> {{sim.name}}{{/if}}
+          </a>
+        </li>
+        <li{{#if frontpage_edit}} class="active"{{/if}}{{#if editing}} class="active"{{/if}}>
+          <a href="/edit">
+            <i class="icon-wrench"></i> Muokkaa
+            {{#if editing}} <span class="divider">/</span> {{editing.name}}{{/if}}
+          </a>
+        </li>
+        <li{{#if settings}} class="active"{{/if}}><a href="/settings"><i class="icon-cogs"></i> Asetukset</a></li>
+        <li{{#if help}} class="active"{{/if}}><a href="/help"><i class="icon-question-sign"></i> Ohjeet</a></li>
+      </ul>
+      <ul class="nav pull-right">
+        <li class="login">{{loginButtons}}</li>
+        <li><a href="http://github.com/Ekokumppanit/Bicyclesim" target="new"><i class="icon-github"></i> Github</a></li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<template name="help">
+  <div class="help">
+    <div class="container">
+      <div class="fluid-row">
+        <h1>Polkupyöräsimulaattori – Kuka, Mitä?</h1>
+        <p>
+          <a href="http://www.ekokumppanit.fi" target="new">Ekokumppanit Oy:n</a> työntekijä Juho Teperi on toteuttanut tämän prototyyppi web-sovelluksen
+          <a href="http://www.expomark.fi/fi/messut/energia2012" target="new">Energia 2012</a> messuja varten.
+          Ohjelmassa voit liikkua (polkea) ympäri maailmaa (tai ainakin valmiita reittejä).
+        </p>
+
+        <h1>Käyttö</h1>
+        <p>
+          Omalla koneellasi voit kokeilla toimintaa valitsemalla <em>Simulaatio</em>-välilehdeltä reitin ja hakkaamalla välilyöntiä.
+          Parhaan kokemuksen saat kun liität tietokoneeseen polkupyörän telineen <small>(traineri tai rolleri)</small> ja nopeusanturin <small>(laite joka lähettää näppäinpainalluksen kun rengas on pyörähtänyt kierroksen)</small> avulla.
+        </p>
+
+        <h1>Toteutus</h1>
+        <p>
+          Ohjelma on toteutettu käyttäen <a href="http://meteor.com" target="new">Meteor</a> JavaSript sovelluskehystä <small>(käyttää palvelinpuolella Node.js)</small>.
+          Kuvat tulevat Google Streetview palvelusta Googlen tarjoaman JavaScript rajapinnan kautta.
+        </p>
+
+        <h1>Vähän siistiä, mistä saan tämän itselleni?</h1>
+        <p>
+          Voit joko käyttää valmista ohjelmaa osoitteessa <a href="http://bicyclesim.ekokumppanit.fi">bicyclesim.ekokumppanit.fi</a> tai
+          hakea ohjelman lähdekoodin <a href="http://github.com/Ekokumppanit/Bicyclesim" target="new">Githubista</a>,
+          voit myös tehdä vapaasti muutoksia koodiin ja lähettää parannuksesi viralliseen versioon jotta muutkin hyötyvät niistä.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="settings">
+  <div class="help">
+    <div class="container">
+      <div class="fluid-row">
+        <form>
+          <legend>Asetukset</legend>
+          <label>Liikekerroin. Vaikuttaa nopeuteen jolla reitillä liikutaan. Ei vaikuta nopeuslukemaan tai kuljettuun matkaan.</label>
+          <input type="text" value="{{settings.multiplier}}" id="settings_multiplier"/>
+          <label>Renkaan koko, tuumia</label>
+          <input type="text" value="{{settings.diameter}}" id="settings_diameter"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="frontpage">
+  <div class="frontpage">
+    <div class="container">
+      <div class="fluid-row">
+        <ul class="thumbnails">
+        {{#each routes}}
+          <li class="span3">
+          {{#if editing}}
+            <div class="thumbnail">
+              <img src="{{staticmap}}" alt=""/>
+              <span>
+              {{#if editing_route_name}}
+                <div class="input"><input type="text" id="route-name" value="{{name}}"/></div>
+              {{else}}
+                {{name}}
+                {{#if can_edit}}<a href="#" class="remove"><i class="icon-remove-sign"></i></a>{{/if}}
+              {{/if}}
+              </span>
+            </div>
+          {{else}}
+            <a href="/{{_id}}" class="thumbnail">
+              <img src="{{staticmap}}" alt=""/>
+              <span>{{name}} <span>{{km route_length}}km</span></span>
+            </a>
+          {{/if}}
+          </li>
+        {{/each}}
+        {{#if editing}}
+          <li class="span3 new-route">
+            {{#if logged_in}}<div class="input"><input type="text" id="new-route" placeholder="New route"/></div>{{/if}}
+          </li>
+        {{/if}}
+        </ul>
+      </div>
+      <div class="fluid-row">
+          <a href="/help" class="btn btn-huge"><i class="icon-question-sign"></i> Ohjeet</a>
+          <a href="http://github.com/Ekokumppanit/Bicyclesim" class="btn btn-huge" target="new"><i class="icon-github"></i> Projekti Githubissa</a>
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="editing">
+  <div class="sidebar">
+    <div class="sidebar-inner">
+      <h3>Owner</h3>
+      <p>{{owner}}</p>
+      {{> points}}
+    </div>
+  </div>
+</template>
+
+<template name="sim">
+  <ul class="speedometer">
+    <li class="distance">{{km distance}} km</li>
+    <li class="speed">{{kmh speed}} <sup>km</sup>/<sub>h<sub></li>
+    <li class="calories"></li>
+  </ul>
+</template>
+
+<template name="distance">
+  <span>{{distance}}</span> km
+</template>
+<template name="speed">
+  <span>{{speed}}</span> <sup>km</sup>/<sub>h</sub>
+</template>
+<template name="calories">
+  <span>{{calories}}</span> cal
+</template>
+
+<template name="points">
+  <h3>Points
+      <span><label class="checkbox inline"><input type="checkbox" id="points-autoadd" {{#if autoadd}}checked="checked"{{/if}}/>Auto add points</label></span>
+  </h3>
+  <ol class="points">
+  {{#each points}}
+    <li class="point{{#if active}} active{{/if}}">
+      <span class="location">{{lat latlng}}, {{lng latlng}}</span>,
+      <span class="heading">{{round heading 2}}°</span>,
+      <span class="distance">{{round distance 2}}m</span>
+      {{#if can_edit}}<a href="#" class="remove"><i class="icon-remove-sign"></i></a>{{/if}}
+    </li>
+  {{/each}}
+    {{#if can_edit}}<li class="new-point"><button type="button" class="btn"><i class="icon-plus-sign"></i></button></li>{{/if}}
+  </ol>
+</template>

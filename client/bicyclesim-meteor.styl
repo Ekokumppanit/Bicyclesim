@@ -1,0 +1,216 @@
+// --- Variables ---
+
+$sidebar_width = 300px
+
+// --- Functions ---
+
+filter(args ...)
+	-webkit-filter args
+	-moz-filter args
+	filter args
+
+// ---
+
+body
+	overflow hidden
+
+.navbar-inverse .brand span
+	color #FFB0B0
+	font-size 0.8em
+
+.navbar-fixed-bottom
+	position absolute
+	.navbar-inner
+		padding-left 15px !important
+		padding-right 15px !important
+	i
+		color #fff
+
+.sidebar
+	li
+		i
+			color #000
+
+a:hover i
+	text-decoration none
+.icon-remove, .icon-remove-sign
+	&:hover
+		color #FFAFAF
+
+
+.btn.btn-huge
+	font-size 34px
+	line-height 34px
+	padding 12px 20px
+	margin-right 30px
+
+.nav
+	.divider
+		color #666
+		padding 0 10px
+	.login
+		padding-top 6px
+
+
+div.input
+	padding-right 14px
+	& > input
+		margin-bottom 0
+		width 100%
+
+.thumbnail
+	background #fff
+	& > span
+		display block
+		background #000
+		background rgba(0, 0, 0, 0.7)
+		color #fff
+		padding 2px 10px
+		line-height 32px
+		font-weight bold
+		& > a
+			float right
+		& > span
+			font-weight normal
+			color #C8C8C8
+			float right
+	&:hover
+		text-decoration none
+	i
+		color #fff
+
+a.thumbnail
+	&:hover
+		border-color #fff !important
+		box-shadow 0 0 25px #fff !important
+
+
+.sidebar
+	position absolute
+	width $sidebar_width
+	top 0
+	bottom 42px
+	left 0
+	overflow-y auto
+
+.sidebar-inner
+	padding 20px
+
+.street, .map
+	img
+		max-width none
+		border none !important
+
+.street
+	position absolute
+	left 0
+	right 0
+	bottom 42px
+	top 0
+	z-index 0
+
+.map
+	position absolute
+	width 300px
+	height 250px
+	left 0
+	top 0
+	opacity 0.8
+	display none
+
+.street
+	filter(blur(4px))
+
+.show-map
+	.street
+		filter(blur(0))
+	.map
+		display block
+
+.show-sidebar
+	.street, .map
+		left $sidebar_width
+
+.frontpage, .help
+	z-index 100
+	position absolute
+	top 0
+	bottom 42px
+	left 0
+	right 0
+	background rgba(0, 0, 0, 0.5)
+	padding-top 30px
+	overflow-y auto
+
+.help
+	background #fff
+	font-size 1.5em
+	line-height 1.5em
+	h1
+		margin-top 40px
+
+.sidebar
+	h3
+		span
+			float right
+
+ol.points
+	margin 0
+	li
+		font-size 0.9em
+		border-top 1px solid #ccc
+		padding 2px 0px
+		list-style-position inside
+		&:first-child, &.new-point
+			border-top 0
+		&.new-point
+			list-style none
+		span.location
+			font-size 0.8em
+		a.remove
+			float right
+
+.speedometer
+	position absolute
+	top 0
+	right 0
+	background rgba(0, 0, 0, 0.6)
+	width 190px
+	padding 15px
+	border-bottom-left-radius 25px
+	li
+		list-style none
+		text-align right
+		font-size 2.5em
+		color #fff
+		font-weight bold
+		line-height 150%
+
+::-webkit-scrollbar
+	background transparent
+	border none
+
+::-webkit-scrollbar:vertical
+	border-width 0 0 0 1px
+	width 11px
+
+::-webkit-scrollbar-corner
+	background transparent
+
+/* These rules are for scrollbar draggable panel */
+::-webkit-scrollbar-thumb
+	background-color rgba(0, 0, 0, 0.6)
+	box-shadow 0 0 2px rgba(0, 0, 0, 0.9) inset
+
+::-webkit-scrollbar-thumb:hover
+	background-color rgba(0, 0, 0, 0.8)
+
+::-webkit-scrollbar-thumb:active
+	background-color rgba(0, 0, 0, 1)
+
+/* These rules are for buttons */
+::-webkit-scrollbar-button:start
+	display none
+
+::-webkit-scrollbar-button:end
+	display none
