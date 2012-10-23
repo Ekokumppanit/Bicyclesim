@@ -11,10 +11,7 @@
 				".cache",
 				".meteor"
 			],
-			"path": "/home/juho/Source/bicyclesim"
-		},
-		{
-			"path": "/home/juho/Source/bicyclesim-bundle"
+			"path": "."
 		}
 	]
 }

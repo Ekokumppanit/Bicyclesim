@@ -72,7 +72,47 @@ Template.sim.helpers({
   }
 });
 
+var sock = new SockJS("http://localhost:9999/speed");
+
 function init_sim() {
+
+
+sock.onopen = function() {
+  console.log('open');
+};
+
+sock.onmessage = function(e) {
+  if (Session.equals('page', 'sim') && window.point) {
+    debug('message', e.data);
+
+    var dist = parseInt(e.data, 10) * c();
+    speed_buffer.push(dist);
+
+    Session.set('speed', speed_buffer.sum() / 5);
+
+    Session.set('distance', Session.get('distance') + 3 * dist);
+    window.traveled += 3 * dist;
+
+    if (window.traveled >= window.point.distance) {
+      var next = Points.findOne({_id: window.point.next});
+
+      // Stay on current point if no next point exists
+      if (next) {
+        window.traveled -= next.distance;
+
+        maps.travel(next._id, {route: true});
+        zoom = 1;
+        zoom_target = 1;
+        window.point = next;
+      }
+    }
+  }
+
+};
+
+sock.onclose = function() {
+  console.log('close');
+};
 
 Meteor.autosubscribe(function () {
   if (Session.equals('page', 'sim')) {
