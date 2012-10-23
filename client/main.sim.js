@@ -41,14 +41,14 @@ $(document).bind('keydown.space', function () {
   }
 });
 
-function speedo() {
-  speed_buffer.push(revs * c());
-  revs = 0;
+// function speedo() {
+//   speed_buffer.push(revs * c());
+//   revs = 0;
 
-  Session.set('speed', speed_buffer.sum() / 5);
-}
+//   Session.set('speed', speed_buffer.sum() / 5);
+// }
 
-setInterval(speedo, 500);
+// setInterval(speedo, 500);
 
 // 5sec, 2 values / sec.
 var speed_buffer = createRingBuffer(5 * 2);
