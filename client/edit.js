@@ -12,6 +12,7 @@ function new_point(latlng) {
     add_point(latlng, num, true);
     ++num;
     $('.sidebar').animate({scrollTop: $('.sidebar-inner').height()}, 'fast');
+    Session.set('saved', false);
   });
 }
 
@@ -92,6 +93,10 @@ Template.points.can_edit = function () {
   return (route && Meteor.user() && route.owner === Meteor.user()._id);
 };
 
+Template.points.saved = function () {
+  return Session.get('saved');
+};
+
 Template.points.helpers(helpers);
 
 Template.points.events({
@@ -101,10 +106,16 @@ Template.points.events({
   'click a.remove': function () {
     Meteor.call('remove_point', this._id, function () {
       full_clear_required = true;
+      Session.set('saved', false);
     });
   },
-  'click .new-point button': function () {
+  'click .new-point': function () {
     new_point(maps.getLatLng());
+  },
+  'click .save': function () {
+    Meteor.call('update_route', Session.get('route'), function () {
+      Session.set('saved', true);
+    });
   },
   'change #points-autoadd': function (event) {
     Session.set('points-autoadd', event.currentTarget.checked);
@@ -124,6 +135,7 @@ Meteor.autorun(function () {
   if (Session.equals('page', 'edit') && Session.get('route')) {
     debug('sivu tai route vaihtui, route: ' + Session.get('route'));
     full_clear_required = true;
+    Session.set('saved', true);
 
     Meteor.deps.isolate(function () {
       var route = Routes.findOne({_id: Session.get('route')});

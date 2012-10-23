@@ -192,6 +192,8 @@
       {{#if can_edit}}<a href="#" class="remove"><i class="icon-remove-sign"></i></a>{{/if}}
     </li>
   {{/each}}
-    {{#if can_edit}}<li class="new-point"><button type="button" class="btn"><i class="icon-plus-sign"></i></button></li>{{/if}}
+    {{#if can_edit}}
+    <li class="actions"><button type="button" class="btn new-point"><i class="icon-plus-sign"></i> Uusi</button> <button type="button" class="btn save{{#if saved}} btn-success{{else}} btn-warning{{/if}}"><i class="icon-save"></i> Tallenna</button></li>
+    {{/if}}
   </ol>
 </template>
