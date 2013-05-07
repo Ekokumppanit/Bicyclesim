@@ -1,4 +1,4 @@
-maps_loaded = function maps_loaded() {
+window.maps_loaded = function maps_loaded() {
 
 window.markers = []; // fuu
 

@@ -2,8 +2,6 @@ window.point = null;
 window.traveled = 0;
 
 function move () {
-  if (!window.point) return;
-
   // var dist = localStorage['multiplier'] * c();
   var dist = localStorage['multiplier'] * 0.1 * Session.get('speed');
   Session.set('distance', Session.get('distance') + dist);
@@ -22,14 +20,13 @@ function move () {
   }
 }
 
-setInterval(move, 100);
-
 var line = '';
 $(document).on('keydown', function (e) {
   if (e.keyCode === 13) { // enter
     if (line.length >= 1 && line[0] == 'S') {
       var speed = Number(line.slice(1));
       Session.set('speed', speed);
+      $('.speedSlider').slider('value', speed);
     }
     line = '';
   } else {
@@ -54,8 +51,9 @@ Template.sim.helpers({
   }
 });
 
-init_sim = function init_sim() {
+window.init_sim = function init_sim() {
 
+var i;
 Meteor.autosubscribe(function () {
   if (Session.equals('page', 'sim')) {
     var route = Routes.findOne({_id: Session.get('route')});
@@ -76,6 +74,8 @@ Meteor.autosubscribe(function () {
         maps.lines.route.add(p.latlng);
         p = Points.findOne({_id: p.next});
       }
+
+      i = setInterval(move, 100);
     }
 
     $('.speedSlider').slider({
@@ -88,6 +88,8 @@ Meteor.autosubscribe(function () {
         Session.set('speed', ui.value);
       }
     });
+  } else {
+    i = clearInterval(i);
   }
 });
 

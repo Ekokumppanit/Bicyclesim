@@ -129,7 +129,7 @@ Template.editing.owner = function () {
   return user.profile.name;
 };
 
-init_edit = function init_edit() {
+window.init_edit = function init_edit() {
 
 Meteor.autorun(function () {
   if (Session.equals('page', 'edit') && Session.get('route')) {

@@ -161,7 +161,7 @@ Meteor.startup(function () {
   Backbone.history.start({pushState: true});
 });
 
-init_main = function init_main() {
+window.init_main = function init_main() {
   Meteor.autosubscribe(function () {
     // When changing page
 
