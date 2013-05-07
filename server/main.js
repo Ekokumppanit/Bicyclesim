@@ -41,7 +41,7 @@ Meteor.methods({
     var route = Routes.findOne({_id: route_id});
     if (!route) return;
 
-    var point_id = Points.insert({latlng: latlng, route: route_id, distance: 0, next: null});
+    var point_id = Points.insert({latlng: latlng, heading: 0, route: route_id, distance: 0, next: null});
 
     // Add new point after last point.
     Points.update({route: route_id, next: null, _id: {$ne: point_id}}, {$set: {next: point_id}});
@@ -49,7 +49,15 @@ Meteor.methods({
     // If route didn't have any point, update first point,
     Routes.update({_id: route_id, first: null}, {$set: {first: point_id}});
 
-    update_route(route_id);
+    // Update distance and heading of previous point
+    var prev = Points.findOne({next: point_id});
+    if (prev) {
+      heading = computeFinalBearing(prev.latlng, latlng);
+      distance = computeDistance(prev.latlng, latlng);
+      Points.update({next: point_id}, {$set: {heading: heading, distance: distance}});
+    }
+
+    // update_route(route_id);
   },
   remove_point: function (point_id) {
     var point = Points.findOne({_id: point_id});
@@ -61,6 +69,9 @@ Meteor.methods({
 
     Points.remove({_id: point_id});
 
-    update_route(point.route);
+    // update_route(point.route);
+  },
+  update_route: function (route_id) {
+    update_route(route_id);
   }
 });

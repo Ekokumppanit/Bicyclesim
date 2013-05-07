@@ -99,7 +99,7 @@
       <div class="fluid-row">
         <form>
           <legend>Asetukset</legend>
-          <label>Liikekerroin. Vaikuttaa nopeuteen jolla reitillä liikutaan. Ei vaikuta nopeuslukemaan tai kuljettuun matkaan.</label>
+          <label>Liikekerroin. Vaikuttaa kuljettuun matkaan mutta ei nopeuslukemaan.</label>
           <input type="text" value="{{settings.multiplier}}" id="settings_multiplier"/>
           <label>Renkaan koko, tuumia</label>
           <input type="text" value="{{settings.diameter}}" id="settings_diameter"/>
@@ -182,6 +182,8 @@
       {{#if can_edit}}<a href="#" class="remove"><i class="icon-remove-sign"></i></a>{{/if}}
     </li>
   {{/each}}
-    {{#if can_edit}}<li class="new-point"><button type="button" class="btn"><i class="icon-plus-sign"></i></button></li>{{/if}}
+    {{#if can_edit}}
+    <li class="actions"><button type="button" class="btn new-point"><i class="icon-plus-sign"></i> Uusi</button> <button type="button" class="btn save{{#if saved}} btn-success{{else}} btn-warning{{/if}}"><i class="icon-save"></i> Tallenna</button></li>
+    {{/if}}
   </ol>
 </template>
