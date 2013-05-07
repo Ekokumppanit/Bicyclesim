@@ -1,30 +1,11 @@
 window.point = null;
 window.traveled = 0;
 
-var createRingBuffer = function (length){
-  var pointer = 0, buffer = [], sum = 0;
+function move () {
+  if (!window.point) return;
 
-  return {
-    push: function (item) {
-      if (buffer[pointer] > 0) {
-        sum -= buffer[pointer];
-        if (sum <= 0) sum = 0;
-      }
-      buffer[pointer] = item;
-      sum += item;
-      pointer = (length + pointer + 1) % length;
-    },
-    sum: function () {
-      return sum;
-    }
-  };
-};
-
-var revs = 0;
-$(document).bind('keydown.space', function () {
-  revs += 1;
-
-  var dist = localStorage['multiplier'] * c();
+  // var dist = localStorage['multiplier'] * c();
+  var dist = localStorage['multiplier'] * 0.1 * Session.get('speed');
   Session.set('distance', Session.get('distance') + dist);
   window.traveled += dist;
 
@@ -39,21 +20,22 @@ $(document).bind('keydown.space', function () {
       window.point = next;
     }
   }
+}
+
+setInterval(move, 100);
+
+var line = '';
+$(document).on('keydown', function (e) {
+  if (e.keyCode === 13) { // enter
+    if (line.length >= 1 && line[0] == 'S') {
+      var speed = Number(line.slice(1));
+      Session.set('speed', speed);
+    }
+    line = '';
+  } else {
+    line += String.fromCharCode(e.keyCode);
+  }
 });
-
-// function speedo() {
-//   speed_buffer.push(revs * c());
-//   revs = 0;
-
-//   Session.set('speed', speed_buffer.sum() / 5);
-// }
-
-// setInterval(speedo, 500);
-
-// 5sec, 2 values / sec.
-var speed_buffer = createRingBuffer(5 * 2);
-var speed_sum = 0;
-var speed_avg = 0;
 
 Template.sim.speed = function () {
   return Session.get('speed');
@@ -72,47 +54,7 @@ Template.sim.helpers({
   }
 });
 
-var sock = new SockJS("http://localhost:9999/speed");
-
-function init_sim() {
-
-
-sock.onopen = function() {
-  console.log('open');
-};
-
-sock.onmessage = function(e) {
-  if (Session.equals('page', 'sim') && window.point) {
-    debug('message', e.data);
-
-    var dist = parseInt(e.data, 10) * c();
-    speed_buffer.push(dist);
-
-    Session.set('speed', speed_buffer.sum() / 5);
-
-    Session.set('distance', Session.get('distance') + 3 * dist);
-    window.traveled += 3 * dist;
-
-    if (window.traveled >= window.point.distance) {
-      var next = Points.findOne({_id: window.point.next});
-
-      // Stay on current point if no next point exists
-      if (next) {
-        window.traveled -= next.distance;
-
-        maps.travel(next._id, {route: true});
-        zoom = 1;
-        zoom_target = 1;
-        window.point = next;
-      }
-    }
-  }
-
-};
-
-sock.onclose = function() {
-  console.log('close');
-};
+init_sim = function init_sim() {
 
 Meteor.autosubscribe(function () {
   if (Session.equals('page', 'sim')) {
@@ -135,7 +77,18 @@ Meteor.autosubscribe(function () {
         p = Points.findOne({_id: p.next});
       }
     }
+
+    $('.speedSlider').slider({
+      orientation: 'vertical',
+      range: 'min',
+      min: 0,
+      max: 22.2, // m/s
+      value: 0,
+      slide: function (event, ui) {
+        Session.set('speed', ui.value);
+      }
+    });
   }
 });
 
-}
+};

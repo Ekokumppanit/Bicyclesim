@@ -1,4 +1,4 @@
-function maps_loaded() {
+maps_loaded = function maps_loaded() {
 
 window.markers = []; // fuu
 
@@ -153,7 +153,7 @@ var Maps = function () {
 
       var point = Points.findOne({_id: point_id});
       if (point) {
-          street.setPosition(glatlng(point.latlng));
+        street.setPosition(glatlng(point.latlng));
         map.setCenter(glatlng(point.latlng));
 
         if (point.heading) street.setPov({zoom: 1, pitch: 0, heading: point.heading});
@@ -170,7 +170,7 @@ $(document).ready(function () {
   init_edit();
 });
 
-}
+};
 
 window.onload = function () {
   var script = document.createElement("script");

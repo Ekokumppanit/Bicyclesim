@@ -164,7 +164,7 @@ Meteor.startup(function () {
   Backbone.history.start({pushState: true});
 });
 
-function init_main() {
+init_main = function init_main() {
   Meteor.autosubscribe(function () {
     // When changing page
 
@@ -182,4 +182,4 @@ function init_main() {
       maps.mode('sim');
     }
   });
-}
+};

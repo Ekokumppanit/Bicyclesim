@@ -10,12 +10,12 @@ helpers = {
   }
 };
 
-var activateInput = function (input) {
+activateInput = function (input) {
   input.focus();
   input.select();
 };
 
-var okCancelEvents = function (selector, callbacks) {
+okCancelEvents = function (selector, callbacks) {
   var ok = callbacks.ok || function () {};
   var cancel = callbacks.cancel || function () {};
 
@@ -37,10 +37,4 @@ var okCancelEvents = function (selector, callbacks) {
       }
     };
   return events;
-};
-
-// From: https://github.com/tmeasday/meteor-deps-extensions
-Meteor.deps.isolate = function(fn) {
-  var context = new Meteor.deps.Context();
-  return context.run(fn);
 };

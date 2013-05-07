@@ -11,3 +11,5 @@ stylus
 accounts-google
 underscore
 accounts-ui
+jquery-ui
+jquery-ui-bootstrap

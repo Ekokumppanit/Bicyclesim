@@ -15,13 +15,13 @@ if (typeof Number.prototype.toDeg == 'undefined') {
   };
 }
 
-function computeDistance(from, to) {
+computeDistance = function computeDistance(from, to) {
   // Equirectangular approximation, should be enough as distances are small
   var R = 6371000; // km
   var x = (to[1].toRad() - from[1].toRad()) * Math.cos((from[0].toRad() + to[0].toRad()) / 2);
   var y = (from[0].toRad() - to[0].toRad());
   return Math.sqrt(x * x + y * y) * R;
-}
+};
 
 function computeInitialBearing(from, to) {
   var dLat = (to[0] - from[0]).toRad();
@@ -34,12 +34,12 @@ function computeInitialBearing(from, to) {
   return (Math.atan2(y, x).toDeg() + 360) % 360;
 }
 
-function computeFinalBearing(from, to) {
+computeFinalBearing = function computeFinalBearing(from, to) {
   return (computeInitialBearing(to, from) + 180) % 360;
-}
+};
 
 // Rest are copied from: https://github.com/moshen/node-googlemaps/blob/master/lib/googlemaps.js
-function createEncodedPolyline(points) {
+createEncodedPolyline = function createEncodedPolyline(points) {
   // Dear maintainer:
   //
   // Once you are done trying to 'optimize' this routine,
@@ -70,7 +70,7 @@ function createEncodedPolyline(points) {
     encoded_points += encodeSignedNumber(dlat) + encodeSignedNumber(dlng);
   }
   return encoded_points;
-}
+};
 
 function encodeNumber(num) {
   var encodeString = "";

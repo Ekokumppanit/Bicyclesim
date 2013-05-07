@@ -1,5 +1,5 @@
-var Routes = new Meteor.Collection('routes');
-var Points = new Meteor.Collection('points');
+Routes = new Meteor.Collection('routes');
+Points = new Meteor.Collection('points');
 
 Routes.allow({
   insert: function (userId, doc) {

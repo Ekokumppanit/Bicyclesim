@@ -16,6 +16,7 @@
   {{/if}}
   {{#if sim}}
     {{> sim}}
+    <div class="speedSliderContainer"><div class="speedSlider"></div></li></div>
   {{/if}}
   {{#if frontpage}}
     {{> frontpage}}
@@ -165,18 +166,7 @@
   <ul class="speedometer">
     <li class="distance">{{km distance}} km</li>
     <li class="speed">{{kmh speed}} <sup>km</sup>/<sub>h<sub></li>
-    <li class="calories"></li>
   </ul>
-</template>
-
-<template name="distance">
-  <span>{{distance}}</span> km
-</template>
-<template name="speed">
-  <span>{{speed}}</span> <sup>km</sup>/<sub>h</sub>
-</template>
-<template name="calories">
-  <span>{{calories}}</span> cal
 </template>
 
 <template name="points">

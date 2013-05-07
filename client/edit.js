@@ -118,14 +118,14 @@ Template.editing.owner = function () {
   return user.profile.name;
 };
 
-function init_edit() {
+init_edit = function init_edit() {
 
 Meteor.autorun(function () {
   if (Session.equals('page', 'edit') && Session.get('route')) {
     debug('sivu tai route vaihtui, route: ' + Session.get('route'));
     full_clear_required = true;
 
-    Meteor.deps.isolate(function () {
+    Deps.nonreactive(function () {
       var route = Routes.findOne({_id: Session.get('route')});
       if (route) {
         maps.travel(route.first, {route: true});
@@ -141,7 +141,7 @@ Meteor.autosubscribe(function () {
 
   if (Session.equals('page', 'edit') && Session.get('route')) {
     if (full_clear_required) {
-      Meteor.deps.isolate(function () {
+      Deps.nonreactive(function () {
         debug('full clear');
 
         maps.lines.route.clear();
