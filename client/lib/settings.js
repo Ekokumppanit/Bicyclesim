@@ -10,21 +10,11 @@ window.settings = {
   'staticmaps_key': 'AIzaSyDtGhiAnSdg9TaGZC_daNcQe43BS8Ws7Iw'
 };
 
-window.c = function () {
-  return Math.PI * localStorage.diameter * 2.54 / 100;
-};
-
-if (_.has(localStorage, 'diameter') && !_.isNumber(localStorage.diameter)) {
-  delete localStorage.diameter;
-}
-
-
 if (_.has(localStorage, 'multiplier') && !_.isNumber(localStorage.multiplier)) {
   delete localStorage.multiplier;
 }
 
 _.defaults(localStorage, {
-  diameter: 28,
   multiplier: 2.5
 });
 
