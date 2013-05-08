@@ -83,6 +83,9 @@ Template.settings.settings = function () {
 Template.settings.events({
   'change #settings_multiplier': function (event) {
     localStorage.setItem('multiplier', parseFloat(event.target.value));
+  },
+  'change #settings_diameter': function (event) {
+    localStorage.setItem('diameter', parseInt(event.target.value, 10));
   }
 });
 
